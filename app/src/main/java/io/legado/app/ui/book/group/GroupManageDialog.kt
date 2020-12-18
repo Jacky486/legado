@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isGone
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,7 +16,7 @@ import io.legado.app.App
 import io.legado.app.R
 import io.legado.app.base.BaseDialogFragment
 import io.legado.app.base.adapter.ItemViewHolder
-import io.legado.app.base.adapter.SimpleRecyclerAdapter
+import io.legado.app.base.adapter.RecyclerAdapter
 import io.legado.app.data.entities.BookGroup
 import io.legado.app.databinding.DialogEditTextBinding
 import io.legado.app.databinding.DialogRecyclerViewBinding
@@ -137,27 +136,10 @@ class GroupManageDialog : BaseDialogFragment(), Toolbar.OnMenuItemClickListener 
     }
 
     private inner class GroupAdapter(context: Context) :
-        SimpleRecyclerAdapter<BookGroup, ItemGroupManageBinding>(context),
+        RecyclerAdapter<BookGroup, ItemGroupManageBinding>(context),
         ItemTouchCallback.Callback {
 
         private var isMoved = false
-
-        override val diffItemCallback: DiffUtil.ItemCallback<BookGroup>
-            get() = object : DiffUtil.ItemCallback<BookGroup>() {
-
-                override fun areItemsTheSame(oldItem: BookGroup, newItem: BookGroup): Boolean {
-                    return oldItem.groupId == newItem.groupId
-                }
-
-                override fun areContentsTheSame(
-                    oldItem: BookGroup,
-                    newItem: BookGroup
-                ): Boolean {
-                    return oldItem.groupName == newItem.groupName
-                            && oldItem.show == newItem.show
-                }
-
-            }
 
         override fun getViewBinding(parent: ViewGroup): ItemGroupManageBinding {
             return ItemGroupManageBinding.inflate(inflater, parent, false)
@@ -192,7 +174,7 @@ class GroupManageDialog : BaseDialogFragment(), Toolbar.OnMenuItemClickListener 
             }
         }
 
-        override fun onMove(srcPosition: Int, targetPosition: Int): Boolean {
+        override fun swap(srcPosition: Int, targetPosition: Int): Boolean {
             swapItem(srcPosition, targetPosition)
             isMoved = true
             return true

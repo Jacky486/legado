@@ -7,14 +7,14 @@ import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
 import io.legado.app.R
 import io.legado.app.base.adapter.ItemViewHolder
-import io.legado.app.base.adapter.SimpleRecyclerAdapter
+import io.legado.app.base.adapter.RecyclerAdapter
 import io.legado.app.data.entities.RuleSub
 import io.legado.app.databinding.ItemRuleSubBinding
 import io.legado.app.ui.widget.recycler.ItemTouchCallback
 import org.jetbrains.anko.sdk27.listeners.onClick
 
 class RuleSubAdapter(context: Context, val callBack: Callback) :
-    SimpleRecyclerAdapter<RuleSub, ItemRuleSubBinding>(context),
+    RecyclerAdapter<RuleSub, ItemRuleSubBinding>(context),
     ItemTouchCallback.Callback {
 
     private val typeArray = context.resources.getStringArray(R.array.rule_type)
@@ -59,7 +59,7 @@ class RuleSubAdapter(context: Context, val callBack: Callback) :
         return ItemRuleSubBinding.inflate(inflater, parent, false)
     }
 
-    override fun onMove(srcPosition: Int, targetPosition: Int): Boolean {
+    override fun swap(srcPosition: Int, targetPosition: Int): Boolean {
         val srcItem = getItem(srcPosition)
         val targetItem = getItem(targetPosition)
         if (srcItem != null && targetItem != null) {

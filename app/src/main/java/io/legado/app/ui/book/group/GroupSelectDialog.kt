@@ -16,7 +16,7 @@ import io.legado.app.App
 import io.legado.app.R
 import io.legado.app.base.BaseDialogFragment
 import io.legado.app.base.adapter.ItemViewHolder
-import io.legado.app.base.adapter.SimpleRecyclerAdapter
+import io.legado.app.base.adapter.RecyclerAdapter
 import io.legado.app.data.entities.BookGroup
 import io.legado.app.databinding.DialogBookGroupPickerBinding
 import io.legado.app.databinding.DialogEditTextBinding
@@ -152,7 +152,7 @@ class GroupSelectDialog : BaseDialogFragment(), Toolbar.OnMenuItemClickListener 
     }
 
     private inner class GroupAdapter(context: Context) :
-        SimpleRecyclerAdapter<BookGroup, ItemGroupSelectBinding>(context),
+        RecyclerAdapter<BookGroup, ItemGroupSelectBinding>(context),
         ItemTouchCallback.Callback {
 
         private var isMoved: Boolean = false
@@ -177,8 +177,8 @@ class GroupSelectDialog : BaseDialogFragment(), Toolbar.OnMenuItemClickListener 
         override fun registerListener(holder: ItemViewHolder, binding: ItemGroupSelectBinding) {
             with(binding) {
                 cbGroup.setOnCheckedChangeListener { buttonView, isChecked ->
-                    getItem(holder.layoutPosition)?.let {
-                        if (buttonView.isPressed) {
+                    if (buttonView.isPressed) {
+                        getItem(holder.layoutPosition)?.let {
                             groupId = if (isChecked) {
                                 groupId + it.groupId
                             } else {
@@ -191,7 +191,7 @@ class GroupSelectDialog : BaseDialogFragment(), Toolbar.OnMenuItemClickListener 
             }
         }
 
-        override fun onMove(srcPosition: Int, targetPosition: Int): Boolean {
+        override fun swap(srcPosition: Int, targetPosition: Int): Boolean {
             swapItem(srcPosition, targetPosition)
             isMoved = true
             return true

@@ -8,20 +8,22 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  * Created by Invincible on 2017/12/15.
  */
-@Suppress("unused")
-abstract class SimpleRecyclerAdapter<ITEM, VB : ViewBinding>(protected val context: Context) :
+@Suppress("unused", "MemberVisibilityCanBePrivate")
+abstract class DiffRecyclerAdapter<ITEM, VB : ViewBinding>(protected val context: Context) :
     RecyclerView.Adapter<ItemViewHolder>() {
 
     val inflater: LayoutInflater = LayoutInflater.from(context)
 
     private val asyncListDiffer: AsyncListDiffer<ITEM> by lazy {
-        AsyncListDiffer(this, diffItemCallback)
+        AsyncListDiffer(this, diffItemCallback).apply {
+            addListListener { _, _ ->
+                onCurrentListChanged()
+            }
+        }
     }
 
     private val lock = Object()
@@ -31,18 +33,7 @@ abstract class SimpleRecyclerAdapter<ITEM, VB : ViewBinding>(protected val conte
 
     var itemAnimation: ItemAnimation? = null
 
-    open val diffItemCallback: DiffUtil.ItemCallback<ITEM> =
-        object : DiffUtil.ItemCallback<ITEM>() {
-
-            override fun areItemsTheSame(oldItem: ITEM, newItem: ITEM): Boolean {
-                return false
-            }
-
-            override fun areContentsTheSame(oldItem: ITEM, newItem: ITEM): Boolean {
-                return true
-            }
-
-        }
+    abstract val diffItemCallback: DiffUtil.ItemCallback<ITEM>
 
     fun setOnItemClickListener(listener: (holder: ItemViewHolder, item: ITEM) -> Unit) {
         itemClickListener = listener
@@ -67,14 +58,6 @@ abstract class SimpleRecyclerAdapter<ITEM, VB : ViewBinding>(protected val conte
             val list = ArrayList(asyncListDiffer.currentList)
             list[position] = item
             asyncListDiffer.submitList(list)
-        }
-    }
-
-    fun swapItem(srcPosition: Int, targetPosition: Int) {
-        synchronized(lock) {
-            val list = ArrayList(getItems())
-            Collections.swap(list, srcPosition, targetPosition)
-            setItems(list)
         }
     }
 
@@ -154,6 +137,10 @@ abstract class SimpleRecyclerAdapter<ITEM, VB : ViewBinding>(protected val conte
     protected abstract fun getViewBinding(parent: ViewGroup): VB
 
     final override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {}
+
+    open fun onCurrentListChanged() {
+
+    }
 
     @Suppress("UNCHECKED_CAST")
     final override fun onBindViewHolder(
