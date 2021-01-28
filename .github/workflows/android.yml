@@ -41,7 +41,7 @@ jobs:
         chmod +x gradlew
         ./gradlew assembleAppRelease
     - name : upload apk
-      uses: actions/upload-artifact@master
+      uses: actions/upload-artifact@v2
       if: always()
       with:
         path: ${{ github.workspace }}/app/build/outputs/apk/app/release/legado.apk
