@@ -27,10 +27,6 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
-    - name: clear 18PlusList.txt
-      run: |
-        echo "清空18PlusList.txt"
-        echo "">$GITHUB_WORKSPACE/app/src/main/assets/18PlusList.txt
     - name: release apk sign
       run: |
         echo "给apk增加签名"
