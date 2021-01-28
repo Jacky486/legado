@@ -44,5 +44,4 @@ jobs:
       uses: actions/upload-artifact@master
       if: always()
       with:
-        name: legado.apk
         path: ${{ github.workspace }}/app/build/outputs/apk/app/release/legado.apk
