@@ -19,7 +19,10 @@ import io.legado.app.data.entities.Book
 import io.legado.app.data.entities.BookChapter
 import io.legado.app.data.entities.BookGroup
 import io.legado.app.databinding.ActivityCacheBookBinding
+import io.legado.app.databinding.DialogEditTextBinding
+import io.legado.app.help.AppConfig
 import io.legado.app.help.BookHelp
+import io.legado.app.lib.dialogs.alert
 import io.legado.app.service.help.CacheBook
 import io.legado.app.ui.filepicker.FilePicker
 import io.legado.app.ui.filepicker.FilePickerDialog
@@ -97,9 +100,10 @@ class CacheActivity : VMBaseActivity<ActivityCacheBookBinding, CacheViewModel>()
                     CacheBook.stop(this@CacheActivity)
                 }
             }
-            R.id.menu_log -> {
+            R.id.menu_export_folder -> export(-1)
+            R.id.menu_export_charset -> showCharsetConfig()
+            R.id.menu_log ->
                 TextListDialog.show(supportFragmentManager, getString(R.string.log), CacheBook.logs)
-            }
             else -> if (item.groupId == R.id.menu_group) {
                 binding.titleBar.subtitle = item.title
                 groupId = appDb.bookGroupDao.getByName(item.title.toString())?.groupId ?: 0
@@ -189,6 +193,15 @@ class CacheActivity : VMBaseActivity<ActivityCacheBookBinding, CacheViewModel>()
 
     override fun export(position: Int) {
         exportPosition = position
+        val path = ACache.get(this@CacheActivity).getAsString(exportBookPathKey)
+        if (path.isNullOrEmpty()) {
+            selectExportFolder()
+        } else {
+            startExport(path)
+        }
+    }
+
+    private fun selectExportFolder() {
         val default = arrayListOf<String>()
         val path = ACache.get(this@CacheActivity).getAsString(exportBookPathKey)
         if (!path.isNullOrEmpty()) {
@@ -207,6 +220,22 @@ class CacheActivity : VMBaseActivity<ActivityCacheBookBinding, CacheViewModel>()
                 binding.titleBar.snackbar(it)
             }
         }
+    }
+
+    private fun showCharsetConfig() {
+        val charsets =
+            arrayListOf("UTF-8", "GB2312", "GBK", "Unicode", "UTF-16", "UTF-16LE", "ASCII")
+        alert(R.string.set_charset) {
+            val alertBinding = DialogEditTextBinding.inflate(layoutInflater).apply {
+                editView.setFilterValues(charsets)
+                editView.setText(AppConfig.exportCharset)
+            }
+            customView { alertBinding.root }
+            okButton {
+                AppConfig.exportCharset = alertBinding.editView.text?.toString() ?: "UTF-8"
+            }
+            cancelButton()
+        }.show()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
