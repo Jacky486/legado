@@ -806,7 +806,7 @@
     <string name="import_bookshelf">导入书单</string>
     <string name="pre_download">预下载</string>
     <string name="pre_download_s">预先下载%s章正文</string>
-    <string name="sort_enable">Habilitar a seleção</string>
+    <string name="is_enabled">Habilitar a seleção</string>
     <string name="background_image">Imagem de fundo</string>
     <string name="export_folder">Pasta de exportação</string>
     <string name="export_charset">导出编码</string>
@@ -832,5 +832,11 @@
     <string name="show_unread">Mostrar não lido</string>
     <string name="use_default_cover">sempre usar capa padrão</string>
     <string name="use_default_cover_s">sempre usar capa padrão,não usar rede</string>
+    <string name="title_font_size">Font size</string>
+    <string name="title_margin_top">Margin top</string>
+    <string name="title_margin_bottom">Marigin bottom</string>
+    <string name="show">Show</string>
+    <string name="hide">Hide</string>
+    <string name="hide_when_status_bar_show">Hide when status bar show</string>
 
 </resources>
