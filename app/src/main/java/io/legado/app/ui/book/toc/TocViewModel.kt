@@ -7,7 +7,7 @@ import io.legado.app.base.BaseViewModel
 import io.legado.app.data.appDb
 import io.legado.app.data.entities.Book
 
-class ChapterListViewModel(application: Application) : BaseViewModel(application) {
+class TocViewModel(application: Application) : BaseViewModel(application) {
     var bookUrl: String = ""
     var bookData = MutableLiveData<Book>()
     var chapterCallBack: ChapterListCallBack? = null
@@ -18,6 +18,20 @@ class ChapterListViewModel(application: Application) : BaseViewModel(application
         execute {
             appDb.bookDao.getBook(bookUrl)?.let {
                 bookData.postValue(it)
+            }
+        }
+    }
+
+    fun reverseToc() {
+        execute {
+            bookData.value?.let {
+                it.setReverseToc(it.getReverseToc())
+                val toc = appDb.bookChapterDao.getChapterList(bookUrl)
+                val newToc = toc.reversed()
+                newToc.forEachIndexed { index, bookChapter ->
+                    bookChapter.index = index
+                }
+                appDb.bookChapterDao.insert(*newToc.toTypedArray())
             }
         }
     }
