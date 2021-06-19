@@ -4,13 +4,6 @@ on:
   push:
     branches: 
       - master
-#    tags:
-#      - '3.*'
-#  pull_request:
-#    branches:
-#      - master
-#  watch:
-#    types: [started]
   schedule:
     - cron: '0 1 * * *'
 
@@ -23,7 +16,6 @@ jobs:
     - uses: actions/checkout@v2
     - name: release apk sign
       run: |
-        echo "给apk增加签名"
         cp $GITHUB_WORKSPACE/.github/workflows/legado.jks $GITHUB_WORKSPACE/app/legado.jks
         sed '$a\RELEASE_STORE_FILE=./legado.jks'          $GITHUB_WORKSPACE/gradle.properties -i 
         sed '$a\RELEASE_KEY_ALIAS=legado'                 $GITHUB_WORKSPACE/gradle.properties -i
@@ -31,7 +23,6 @@ jobs:
         sed '$a\RELEASE_KEY_PASSWORD=gedoor_legado'       $GITHUB_WORKSPACE/gradle.properties -i
     - name: build with gradle
       run: |
-        echo "开始进行release构建"
         chmod +x gradlew
         ./gradlew assembleAppRelease
     - name : upload apk
