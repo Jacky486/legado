@@ -2,25 +2,17 @@
   {
     "themeName": "典雅蓝",
     "isNightTheme": false,
-    "primaryColor": "#03A9F4",
-    "accentColor": "#AD1457",
-    "backgroundColor": "#F5F5F5",
-    "bottomBackground": "#EEEEEE"
+    "primaryColor": "#FEFEFE",
+    "accentColor": "#3D92D6",
+    "backgroundColor": "#FEFEFE",
+    "bottomBackground": "#FEFEFE"
   },
   {
-    "themeName": "黑白",
+    "themeName": "黑",
     "isNightTheme": true,
-    "primaryColor": "#303030",
-    "accentColor": "#E0E0E0",
-    "backgroundColor": "#424242",
-    "bottomBackground": "#424242"
-  },
-  {
-    "themeName": "A屏黑",
-    "isNightTheme": true,
-    "primaryColor": "#000000",
-    "accentColor": "#FFFFFF",
-    "backgroundColor": "#000000",
-    "bottomBackground": "#000000"
+    "primaryColor": "#262626",
+    "accentColor": "#1D83D5",
+    "backgroundColor": "#262626",
+    "bottomBackground": "#262626"
   }
 ]
