@@ -1,9 +1,10 @@
 [
   {
+    "name": "预设",
     "bgStr": "山水墨影.jpg",
     "bgStrEInk": "#FFFFFF",
     "bgStrNight": "宁静夜色.jpg",
-    "bgType": 2,
+    "bgType": 1,
     "bgTypeEInk": 0,
     "bgTypeNight": 2,
     "darkStatusIcon": true,
@@ -21,7 +22,6 @@
     "headerPaddingTop": 0,
     "letterSpacing": 0.09,
     "lineSpacingExtra": 12,
-    "name": "预设",
     "paddingBottom": 6,
     "paddingLeft": 16,
     "paddingRight": 16,
