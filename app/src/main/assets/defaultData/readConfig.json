@@ -6,7 +6,7 @@
     "bgStrNight": "宁静夜色.jpg",
     "bgType": 1,
     "bgTypeEInk": 0,
-    "bgTypeNight": 2,
+    "bgTypeNight": 1,
     "darkStatusIcon": true,
     "darkStatusIconEInk": true,
     "darkStatusIconNight": false,
