@@ -1,0 +1,44 @@
+name: Android built CI
+
+on: 
+  push:
+    branches: 
+      - master
+  schedule:
+    - cron: '0 1 * * *'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: release apk sign
+      run: |
+        cp $GITHUB_WORKSPACE/.github/workflows/legado.jks $GITHUB_WORKSPACE/app/legado.jks
+        sed '$a\RELEASE_STORE_FILE=./legado.jks'          $GITHUB_WORKSPACE/gradle.properties -i 
+        sed '$a\RELEASE_KEY_ALIAS=legado'                 $GITHUB_WORKSPACE/gradle.properties -i
+        sed '$a\RELEASE_STORE_PASSWORD=gedoor_legado'     $GITHUB_WORKSPACE/gradle.properties -i
+        sed '$a\RELEASE_KEY_PASSWORD=gedoor_legado'       $GITHUB_WORKSPACE/gradle.properties -i
+        sed "s/'.release'/'.releaseA'/" $GITHUB_WORKSPACE/app/build.gradle  -i
+    - name: build with gradle
+      run: |
+        chmod +x gradlew
+        ./gradlew assembleAppRelease
+    - name : upload apk
+      uses: actions/upload-artifact@v2
+      if: always()
+      with:
+        path: "app/build/outputs/apk/app/release/*.apk"
+    - name: Send commit to telegram
+      uses: appleboy/telegram-action@master
+      with:
+        to: ${{ secrets.TELEGRAM_TO }}
+        token: ${{ secrets.TELEGRAM_TOKEN }}
+        format: markdown
+        message: |+
+          New push to github!
+          *${{ github.event.head_commit.message }}* by ${{ github.event.head_commit.author.name }}
+          See commit detail [here](${{ github.event.head_commit.url }})
+        document: "app/build/outputs/apk/app/release/*.apk"
